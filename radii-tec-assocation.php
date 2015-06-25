@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Radii TEC Association Plugin
-Description: This is a co-plugin to customize the main plugin of The Events Calendar Version 3.9.3  (required), The Events Calendar PRO Version 3.9.3  (required), The Filter bar Version 3.9.3  (required), Event RocketVersion 2.5.2 (required) - <strong>Feature A)</strong> Include WP Page content into an event category page if they have the same slug.<strong>Feature B)</strong> Related workshops can be attached to any event as long a you use the custom field WORKSHOP-PARENT-EVENT-ID <strong>Feature C)</strong> TEC Filter Bar modification - Event Type, Speaker, Region are added to the filter bar.
+Description: This is a co-plugin to customize the main plugin of The Events Calendar Version 3.9.3  (required), The Events Calendar PRO Version 3.9.3  (required), The Filter bar Version 3.9.3  (required), Event RocketVersion 2.5.2 (required) - <strong>Feature A)</strong> Include WP Page content into an event category page if they have the same slug.<strong>Feature B)</strong> Related workshops can be attached to any event as long a you use the custom field WORKSHOP-PARENT-EVENT-ID <strong>Feature C)</strong> TEC Filter Bar modification - Event Type, Speaker, Region are added to the filter bar when you create the following event category parents  (event-region,event-type,event-speakers)
 Version: 0.1
 Author: Radii Production Inc.
 Author URI: http://www.goradii.com
@@ -140,7 +140,7 @@ function tribe_single_related_workshops( ) {
 
 	} else {
 
-	   require_once( '/resources/related-workshops.php' ); // From child plugin directory - Works!
+	   require_once( plugin_dir_path(__FILE__) . '/resources/related-workshops.php' ); // From child plugin directory - Works!
 	}
 
 }	

@@ -96,14 +96,14 @@ class TribeEventsFilter_CategoryEventRegion extends TribeEventsFilter {
         //
         protected function getTaxIDBySlug($slugName) {
                 
-            $custom_parent_id = 0;  // init to parent by default 
+            $custom_parent_id = -1;  // init to parent by default 
             // Find the term_taxonomy_id for the unique slug event-speakers
             $custom_term = get_terms(TribeEvents::TAXONOMY, array( 'slug' => $slugName) );
 
  
             if( empty( $custom_term ) )  // Error if list is empty, or use the event-speaker slug;
             {
-                    echo 'Error:  cannot find event-speakers slug.';
+                   // echo 'Error:  cannot find event-speakers slug.';
             }else{
                     $custom_parent_id  = $custom_term [0]-> term_taxonomy_id;  // should be the only element in the array
             }
