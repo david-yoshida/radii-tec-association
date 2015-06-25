@@ -31,20 +31,35 @@ add_action( 'tribe_events_before_template', 'TEC_action_hook_intro' );
 
 function TEC_action_hook_intro () {
 
+	// INIT
+	$PARENT_SECTION_SLUG_NAME = '';  // THIS IS THE PARENT SLUG THAT WE WILL SEARCH FOR THESE PAGES!!
+	$PARENT_SECTION_SLUG_NAME = apply_filters('radii_tec_parent_section_slug', $PARENT_SECTION_SLUG_NAME);
+
+
 	// Figure out the TED category listing page that you are on
 	$cat = get_queried_object();
-	$page_slug = $cat->slug; // i.e. 'industry-events';
 
-	// Only show if page slug exists
-	if(!empty($page_slug )){
 
-		$page_data = get_page_by_path($page_slug);
-		$page_id = $page_data->ID;
+	if(!empty($cat)){ // FYI - the events landing page has no quieried object, so do nothing
 
-		if(!empty($page_id)){
-			echo '<h2>' . $page_data->post_title . '</h2>';
-			echo apply_filters('the_content', $page_data->post_content);
-		}
+		$page_slug = $cat->slug; // i.e. 'industry-events';
+
+			// Only show if page slug exists
+			if(!empty($page_slug )){
+
+				$page_data = get_page_by_path($PARENT_SECTION_SLUG_NAME . $page_slug);  //$page_data = get_page_by_path('/events/industry-events/');   // Works!
+
+				if(!empty($page_data )){
+
+					$page_id = $page_data->ID;
+
+					if(!empty($page_id)){
+						echo '<h2>' . $page_data->post_title . '</h2>';
+						echo apply_filters('the_content', $page_data->post_content);
+					}
+				}
+
+			}
 
 	}
 } // End TEC_action_hook_intro()

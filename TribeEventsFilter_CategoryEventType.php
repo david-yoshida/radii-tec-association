@@ -42,13 +42,13 @@ class TribeEventsFilter_CategoryEventType extends TribeEventsFilter {
                 $event_categories_term = get_terms( TribeEvents::TAXONOMY, array( 'orderby' => 'name', 'order' => 'DESC', 'parent' => $custom_parent_id ) );
                 $event_categories_by_id = array();
                 foreach( $event_categories_term as $term ) {
-                        $event_categories_by_id[$term->term_id] = $term;
+                        $event_categories_by_id[$term->term_id] = $term; //event_categories_by_id - THIS ARRAY HAS 4 ITEMS
                 }
                 $event_categories_by_id_reverse = array_reverse( $event_categories_by_id );
-                $parents = array( '0' );
+                $parents = array( $custom_parent_id ); // dyoshida was  '0'
                 while ( !empty( $parents ) ) {
                         $parents_copy = $parents;
-                        foreach ( $event_categories_by_id_reverse as $term ) {
+                        foreach ( $event_categories_by_id_reverse as $term ) {   // loop 4 times
                                 if ( in_array( $term->parent, $parents_copy ) ) {
                                         $parents[] = $term->term_id;
                                         unset( $event_categories_by_id[$term->term_id] );
@@ -61,7 +61,7 @@ class TribeEventsFilter_CategoryEventType extends TribeEventsFilter {
                 foreach( $event_categories_by_id as $cat ) {
                         $child_depth = 0;
                         $parent_id = $cat->parent;
-                        while ( $parent_id != 0 ) {
+                        while ( $parent_id !=  $custom_parent_id ) { // dyoshida was $parent_id != 0
                                 $child_depth++;
                                 $parent_id = $event_categories_by_id[$parent_id]->parent;
                         }

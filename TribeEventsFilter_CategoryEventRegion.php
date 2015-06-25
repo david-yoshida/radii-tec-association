@@ -45,7 +45,7 @@ class TribeEventsFilter_CategoryEventRegion extends TribeEventsFilter {
                         $event_categories_by_id[$term->term_id] = $term;
                 }
                 $event_categories_by_id_reverse = array_reverse( $event_categories_by_id );
-                $parents = array( '0' );
+                $parents = array( $custom_parent_id ); // was '0'
                 while ( !empty( $parents ) ) {
                         $parents_copy = $parents;
                         foreach ( $event_categories_by_id_reverse as $term ) {
@@ -61,7 +61,7 @@ class TribeEventsFilter_CategoryEventRegion extends TribeEventsFilter {
                 foreach( $event_categories_by_id as $cat ) {
                         $child_depth = 0;
                         $parent_id = $cat->parent;
-                        while ( $parent_id != 0 ) {
+                        while ( $parent_id != $custom_parent_id ) { // was 0 dyoshida
                                 $child_depth++;
                                 $parent_id = $event_categories_by_id[$parent_id]->parent;
                         }
