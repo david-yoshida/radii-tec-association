@@ -57,7 +57,14 @@ function TEC_action_hook_intro () {
 
 					if(!empty($page_id)){
 						echo '<h2>' . $page_data->post_title . '</h2>';
-						echo apply_filters('the_content', $page_data->post_content);
+						
+						if (defined('SITEORIGIN_PANELS_VERSION')){ // Check for the site origin plugin
+							echo siteorigin_panels_render( $page_id );
+						}else{
+							echo apply_filters('the_content', $page_data->post_content);
+						}
+
+						
 					}
 				}
 
