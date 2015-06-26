@@ -35,12 +35,14 @@ function TEC_action_hook_intro () {
 	$PARENT_SECTION_SLUG_NAME = '';  // THIS IS THE PARENT SLUG THAT WE WILL SEARCH FOR THESE PAGES!!
 	$PARENT_SECTION_SLUG_NAME = apply_filters('radii_tec_parent_section_slug', $PARENT_SECTION_SLUG_NAME);
 
-
 	// Figure out the TED category listing page that you are on
 	$cat = get_queried_object();
 
-
 	if(!empty($cat)){ // FYI - the events landing page has no quieried object, so do nothing
+
+		if(!empty($cat->slug))  // sometimes there is no slug
+
+		{
 
 		$page_slug = $cat->slug; // i.e. 'industry-events';
 
@@ -60,6 +62,8 @@ function TEC_action_hook_intro () {
 				}
 
 			}
+
+		}
 
 	}
 } // End TEC_action_hook_intro()
@@ -98,7 +102,7 @@ function radii_filter_settings_tab_fields($fields, $tab){
 			switch ( $tab ) {
 				case 'display':
 
-					$fields = TribeEvents::array_insert_after_key(
+					$fields = Tribe__Events__Main::array_insert_after_key(
 						'tribeDisableTribeBar', $fields, array(
 							'hideRelatedWorkshops' => array(
 								'type'            => 'checkbox_bool',
@@ -189,7 +193,9 @@ function tribe_get_related_workshop_posts( $count = 3, $post = false ) {
  *	FEATURE C) TEC Filter Bar modifiction - Event Type, Speaker, Region are added to the filter bar
  *
  */
-require_once(plugin_dir_path( __FILE__ ) . '../the-events-calendar-filterbar/lib/tribe-filter.class.php');
+//require_once(plugin_dir_path( __FILE__ ) . '../the-events-calendar-filterbar/lib/tribe-filter.class.php');
+require_once(plugin_dir_path( __FILE__ ) . '../the-events-calendar-filterbar/src/Tribe/Filter.php');
+
 require_once('TribeEventsFilter_CategoryEventType.php');
 require_once('TribeEventsFilter_CategoryEventSpeaker.php');
 require_once('TribeEventsFilter_CategoryEventRegion.php');
@@ -203,4 +209,5 @@ function radii_tribe_events_filters_create_filters() {
 	new TribeEventsFilter_CategoryEventRegion('Region', 'region_filter');
 }
 // FEATURE C) END
+
 

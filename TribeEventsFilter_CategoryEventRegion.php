@@ -7,7 +7,7 @@
  * Docs for TribeEventsFilter: http://docs.tri.be/Filter-Bar/class-TribeEventsFilter.html
  */
 
-class TribeEventsFilter_CategoryEventRegion extends TribeEventsFilter {
+class TribeEventsFilter_CategoryEventRegion extends Tribe__Events__Filterbar__Filter {
         public $type = 'select';
  
         public function get_admin_form() {
@@ -39,7 +39,7 @@ class TribeEventsFilter_CategoryEventRegion extends TribeEventsFilter {
                 $custom_parent_id  = $this->getTaxIDBySlug('event-region'); 
 
                 $event_categories = array();
-                $event_categories_term = get_terms( TribeEvents::TAXONOMY, array( 'orderby' => 'name', 'order' => 'DESC', 'parent' => $custom_parent_id ) );
+                $event_categories_term = get_terms( Tribe__Events__Main::TAXONOMY, array( 'orderby' => 'name', 'order' => 'DESC', 'parent' => $custom_parent_id ) );
                 $event_categories_by_id = array();
                 foreach( $event_categories_term as $term ) {
                         $event_categories_by_id[$term->term_id] = $term;
@@ -52,7 +52,7 @@ class TribeEventsFilter_CategoryEventRegion extends TribeEventsFilter {
                                 if ( in_array( $term->parent, $parents_copy ) ) {
                                         $parents[] = $term->term_id;
                                         unset( $event_categories_by_id[$term->term_id] );
-                                        $event_categories_by_id = TribeEvents::array_insert_after_key( $term->parent, $event_categories_by_id, array( $term->term_id => $term ) );
+                                        $event_categories_by_id = Tribe__Events__Main::array_insert_after_key( $term->parent, $event_categories_by_id, array( $term->term_id => $term ) );
                                 }
                         }
                         $parents = array_diff( $parents, $parents_copy );
@@ -81,7 +81,7 @@ class TribeEventsFilter_CategoryEventRegion extends TribeEventsFilter {
  
         protected function setup_query_args() {
                 $this->queryArgs = array( 'tax_query' => array( array(
-                        'taxonomy' => TribeEvents::TAXONOMY,
+                        'taxonomy' => Tribe__Events__Main::TAXONOMY,
                         'field' => 'id',
                         'terms' => $this->currentValue,
                         'include_children' => false,
@@ -98,7 +98,7 @@ class TribeEventsFilter_CategoryEventRegion extends TribeEventsFilter {
                 
             $custom_parent_id = -1;  // init to parent by default 
             // Find the term_taxonomy_id for the unique slug event-speakers
-            $custom_term = get_terms(TribeEvents::TAXONOMY, array( 'slug' => $slugName) );
+            $custom_term = get_terms(Tribe__Events__Main::TAXONOMY, array( 'slug' => $slugName) );
 
  
             if( empty( $custom_term ) )  // Error if list is empty, or use the event-speaker slug;
