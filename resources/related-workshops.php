@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-$posts = tribe_get_related_workshops();  // default 3
+$posts = tribe_get_related_workshop_posts();  // default 3
 
 ?>
 <?php
