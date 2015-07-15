@@ -21,6 +21,8 @@ License: GPLv2 or later
 
 		FEATURE C) TEC Filter Bar modifiction - Event Type, Speaker, Region are added to the filter bar
 */
+
+
 /*
  *  dyoshida June 19, 2015
  *
@@ -31,48 +33,46 @@ add_action( 'tribe_events_before_template', 'TEC_action_hook_intro' );
 
 function TEC_action_hook_intro () {
 
-	// INIT
+	// init
 	$PARENT_SECTION_SLUG_NAME = '';  // THIS IS THE PARENT SLUG THAT WE WILL SEARCH FOR THESE PAGES!!
 	$PARENT_SECTION_SLUG_NAME = apply_filters('radii_tec_parent_section_slug', $PARENT_SECTION_SLUG_NAME);
 
 	// Figure out the TED category listing page that you are on
 	$cat = get_queried_object();
 
+	$pageName = '';
 	if(!empty($cat)){ // FYI - the events landing page has no quieried object, so do nothing
 
-		if(!empty($cat->slug))  // sometimes there is no slug
-
-		{
-
-		$page_slug = $cat->slug; // i.e. 'industry-events';
-
-			// Only show if page slug exists
-			if(!empty($page_slug )){
-
-				$page_data = get_page_by_path($PARENT_SECTION_SLUG_NAME . $page_slug);  //$page_data = get_page_by_path('/events/industry-events/');   // Works!
-
-				if(!empty($page_data )){
-
-					$page_id = $page_data->ID;
-
-					if(!empty($page_id)){
-						echo '<h2>' . $page_data->post_title . '</h2>';
-						
-						if (defined('SITEORIGIN_PANELS_VERSION')){ // Check for the site origin plugin
-							echo siteorigin_panels_render( $page_id );
-						}else{
-							echo apply_filters('the_content', $page_data->post_content);
-						}
-
-						
-					}
-				}
-
-			}
-
+		if(!empty($cat->slug)){  // This check was needed for the month view /events/month view
+			// NOT EMPTY 
+			$pageName = 'pagename='. $PARENT_SECTION_SLUG_NAME .  $cat->slug;    //  i.e. 'pagename=events/industry-events'
 		}
 
+		//var_dump($cat);
+ 		//echo $pageName; // debug
 	}
+ 
+	//JEFFREY'S ADDED CODE
+
+	// Query for the industry events page
+	$industry_events = new WP_Query( $pageName );
+	// The Loop
+	if ( $industry_events->have_posts() ) {
+		echo '<div class="events-padding">';
+		while ( $industry_events->have_posts() ) {
+			$industry_events->the_post();
+			the_content();
+		}
+		echo '</div>';
+	} else {
+		echo '';
+	}
+	// Reset post data (important!)
+	wp_reset_postdata();
+
+	//#JEFFREY'S ADDED CODE
+
+
 } // End TEC_action_hook_intro()
 // FEATURE A) END
 
@@ -105,6 +105,7 @@ function show_related_workshops() {
 add_filter( 'tribe_settings_tab_fields', 'radii_filter_settings_tab_fields', 11, 2 );
 
 function radii_filter_settings_tab_fields($fields, $tab){
+
 
 			switch ( $tab ) {
 				case 'display':
@@ -186,6 +187,7 @@ function tribe_get_related_workshop_posts( $count = 3, $post = false ) {
 		)),
 
 	));
+
 
 	return apply_filters( 'tribe_get_related_workshop_posts',  $posts ) ;
 }
